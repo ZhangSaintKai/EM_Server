@@ -26,7 +26,7 @@ namespace ServerWebAPI.BLL
         public async Task<List<PrivateMessageEx>> GetList(string userId, string conversationId)
         {
             //PrivateConversationEx conversation = await _conversationBLL.GetByIDUserID(conversationId, userId) ?? throw new Exception("当前登录用户不是该会话中的成员");
-            List<PrivateMessageEx> messageExList = await _messageDAL.GetList(conversationId);
+            List<PrivateMessageEx> messageExList = await _messageDAL.GetListExByConversationID(conversationId);
             //读不是发送者的消息
             //messageExList.ForEach(msg =>
             //{
@@ -74,17 +74,14 @@ namespace ServerWebAPI.BLL
         public async Task Read(string userId, string conversationId)
         {
             PrivateConversationEx conversation = await _conversationBLL.GetByIDUserID(conversationId, userId) ?? throw new Exception("当前登录用户不是该会话中的成员");
-            List<PrivateMessageEx> messageExList = await _messageDAL.GetList(conversationId);
-            //读不是发送者的消息
-            messageExList.ForEach(msg =>
+            List<TPrivateMessage> messageReadList = await _messageDAL.GetListByConversationID(conversationId);
+            //读不是发送者且未读的消息
+            messageReadList = messageReadList.Where(msg => msg.MemberId != conversation.MemberId && !msg.Read).ToList();
+            messageReadList.ForEach(msg =>
             {
-                if (msg.MemberId != conversation.MemberId)
-                {
-                    msg.Read = true;
-                    msg.ReadTime = DateTime.Now;
-                }
+                msg.Read = true;
+                msg.ReadTime = DateTime.Now;
             });
-            IEnumerable<TPrivateMessage> messageReadList = messageExList.Where(msg => msg.MemberId != conversation.MemberId);  // 子类转父类（隐式）
             await _messageDAL.Update(messageReadList);
             //读不是发送者的消息
         }

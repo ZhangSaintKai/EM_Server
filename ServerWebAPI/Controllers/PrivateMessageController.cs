@@ -39,8 +39,11 @@ namespace ServerWebAPI.Controllers
             try
             {
                 if (HttpContext.Items["User"] is not TUser user) return Unauthorized("HttpContext.Items[User] IS NULL");
-                string conversationId = body.ConversationId, messageType = body.MessageType, content = body.Content;
-                string? source = body.Source, replyFor = body.ReplyFor;
+                string conversationId = body.ConversationId,
+                    messageType = body.MessageType,
+                    content = body.Content;
+                string? source = body.Source,
+                    replyFor = body.ReplyFor;
                 await _messageBLL.Send(user.UserId, conversationId, messageType, content, source, replyFor);
                 return Ok();
 
@@ -53,7 +56,7 @@ namespace ServerWebAPI.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Read(string conversationId)
+        public async Task<IActionResult> Read([FromBody] string conversationId)
         {
             try
             {
