@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ServerWebAPI.Schemas;
 
 namespace ServerWebAPI.Controllers
 {
@@ -14,18 +15,19 @@ namespace ServerWebAPI.Controllers
             _configuration = configuration;
         }
 
-        [HttpGet]
-        public IActionResult CheckUpdate()
+        [HttpPost]
+        public IActionResult CheckUpdate(ClientVersion clientVersion)
         {
             try
             {
-                var clientVersion = _configuration.GetRequiredSection("ClientVersion");
+                var newestClientVersion = _configuration.GetRequiredSection("ClientVersion");
                 var result = new
                 {
-                    version = clientVersion["version"],
-                    description = clientVersion["description"],
-                    pkgUrl = clientVersion["pkgUrl"],
-                    wgtUrl = clientVersion["wgtUrl"]
+                    version = newestClientVersion["version"],
+                    description = newestClientVersion["description"],
+                    pkgUrl = newestClientVersion["pkgUrl"],
+                    wgtUrl = newestClientVersion["wgtUrl"],
+                    update = newestClientVersion["version"] != clientVersion.Version,
 
                 };
                 return Ok(result);

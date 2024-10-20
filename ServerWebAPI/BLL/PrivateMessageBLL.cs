@@ -25,20 +25,8 @@ namespace ServerWebAPI.BLL
 
         public async Task<List<PrivateMessageEx>> GetList(string userId, string conversationId)
         {
-            //PrivateConversationEx conversation = await _conversationBLL.GetByIDUserID(conversationId, userId) ?? throw new Exception("当前登录用户不是该会话中的成员");
+            PrivateConversationEx conversation = await _conversationBLL.GetByIDUserID(conversationId, userId) ?? throw new Exception("当前登录用户不是该会话中的成员");
             List<PrivateMessageEx> messageExList = await _messageDAL.GetListExByConversationID(conversationId);
-            //读不是发送者的消息
-            //messageExList.ForEach(msg =>
-            //{
-            //    if (msg.MemberId != conversation.MemberId)
-            //    {
-            //        msg.Read = true;
-            //        msg.ReadTime = DateTime.Now;
-            //    }
-            //});
-            //IEnumerable<TPrivateMessage> messageReadList = messageExList.Where(msg => msg.MemberId != conversation.MemberId);
-            //await _messageDAL.Update(messageReadList);
-            //读不是发送者的消息
             return messageExList;
         }
 
@@ -63,7 +51,8 @@ namespace ServerWebAPI.BLL
             if (webSocket != null)
             {
                 // 将消息转换为字节数组
-                byte[]? buffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message));
+                //byte[]? buffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message));
+                byte[]? buffer = Encoding.UTF8.GetBytes("message");
                 // 发送消息到指定WebSocket实例
                 await webSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
             }
@@ -83,7 +72,8 @@ namespace ServerWebAPI.BLL
                 msg.ReadTime = DateTime.Now;
             });
             await _messageDAL.Update(messageReadList);
-            //读不是发送者的消息
+            //读完后删
+            await _messageDAL.Delete(messageReadList);
         }
     }
 }

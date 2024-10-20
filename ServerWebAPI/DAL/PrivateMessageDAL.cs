@@ -62,12 +62,18 @@ namespace ServerWebAPI.DAL
         public async Task Update(IEnumerable<TPrivateMessage> privateMessages)
         {
             //检查实体的状态
-            foreach (var entry in _emContext.ChangeTracker.Entries<TPrivateMessage>())
-            {
-                Console.WriteLine($"{entry.Entity.MemberId} - {entry.State}");
-            }
+            //foreach (var entry in _emContext.ChangeTracker.Entries<TPrivateMessage>())
+            //{
+            //    Console.WriteLine($"{entry.Entity.MemberId} - {entry.State}");
+            //}
             //检查实体的状态
             _emContext.TPrivateMessages.UpdateRange(privateMessages);
+            await _emContext.SaveChangesAsync(true);
+        }
+
+        public async Task Delete(IEnumerable<TPrivateMessage> privateMessages)
+        {
+            _emContext.TPrivateMessages.RemoveRange(privateMessages);
             await _emContext.SaveChangesAsync(true);
         }
 
