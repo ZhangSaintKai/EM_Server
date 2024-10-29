@@ -13,10 +13,12 @@ namespace ServerWebAPI.DAL
             _emContext = emContext;
         }
 
-        public async Task Create(TPrivateMessage privateMessage)
+        public async Task<TPrivateMessage> Create(TPrivateMessage privateMessage)
         {
             _emContext.TPrivateMessages.Add(privateMessage);
             await _emContext.SaveChangesAsync();
+            // SaveChangesAsync()后,privateMessage.MessageId会包含新增记录的Id
+            return privateMessage;
         }
 
         public async Task<List<PrivateMessageEx>> GetListExByConversationID(string conversationId)
@@ -61,12 +63,6 @@ namespace ServerWebAPI.DAL
 
         public async Task Update(IEnumerable<TPrivateMessage> privateMessages)
         {
-            //检查实体的状态
-            //foreach (var entry in _emContext.ChangeTracker.Entries<TPrivateMessage>())
-            //{
-            //    Console.WriteLine($"{entry.Entity.MemberId} - {entry.State}");
-            //}
-            //检查实体的状态
             _emContext.TPrivateMessages.UpdateRange(privateMessages);
             await _emContext.SaveChangesAsync(true);
         }

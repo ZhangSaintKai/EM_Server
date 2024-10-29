@@ -44,8 +44,12 @@ namespace ServerWebAPI.Controllers
                     content = body.Content;
                 string? source = body.Source,
                     replyFor = body.ReplyFor;
-                await _messageBLL.Send(user.UserId, conversationId, messageType, content, source, replyFor);
-                return Ok();
+                TPrivateMessage newMessage = await _messageBLL.Send(user.UserId, conversationId, messageType, content, source, replyFor);
+                return Ok(new
+                {
+                    messageId = newMessage.MessageId.ToString(),
+                    sendTime = newMessage.SendTime,
+                });
 
             }
             catch (Exception e)

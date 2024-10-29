@@ -30,7 +30,7 @@ namespace ServerWebAPI.BLL
             return messageExList;
         }
 
-        public async Task Send(string userId, string conversationId, string messageType, string content, string? source, string? replyFor)
+        public async Task<TPrivateMessage> Send(string userId, string conversationId, string messageType, string content, string? source, string? replyFor)
         {
             PrivateConversationEx conversation = await _conversationBLL.GetByIDUserID(conversationId, userId) ?? throw new Exception("当前登录用户不是该会话中的成员");
             TPrivateMessage message = new()
@@ -44,7 +44,7 @@ namespace ServerWebAPI.BLL
                 Read = false,
                 ReadTime = null,
             };
-            await _messageDAL.Create(message);
+            message = await _messageDAL.Create(message);
             //
             if (conversation.OtherUser == null || string.IsNullOrWhiteSpace(conversation.OtherUser.UserId)) throw new Exception("找不到此成员所属会话的其他成员");
             WebSocket? webSocket = _wss.GetWS(Guid.Parse(conversation.OtherUser.UserId));
@@ -57,6 +57,7 @@ namespace ServerWebAPI.BLL
                 await webSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
             }
             //else对方离线
+            return message;
 
         }
 
