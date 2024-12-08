@@ -48,15 +48,15 @@ namespace ServerWebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetBy2UserID(string contactUserId)
+        public async Task<IActionResult> CheckContact(string targetUserId)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(contactUserId))
+                if (string.IsNullOrWhiteSpace(targetUserId))
                     return UnprocessableEntity("联系人ID不能为空");
                 if (HttpContext.Items["User"] is not TUser user) return Unauthorized("HttpContext.Items[User] IS NULL");
-                ContactEx? contact = await _contactBLL.GetBy2UserID(user.UserId, contactUserId);
-                return Ok(contact);
+                ContactEx? contact = await _contactBLL.GetBy2UserID(user.UserId, targetUserId);
+                return Ok(contact != null);
             }
             catch (Exception e)
             {

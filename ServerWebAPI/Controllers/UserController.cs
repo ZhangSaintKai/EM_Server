@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ServerWebAPI.BLL;
 using ServerWebAPI.Models;
+using ServerWebAPI.ModelsEx;
 using ServerWebAPI.Schemas;
 using System.Text.RegularExpressions;
 
@@ -12,11 +13,13 @@ namespace ServerWebAPI.Controllers
     {
         private readonly ILogger _logger;
         private readonly UserBLL _userBLL;
+        private readonly ContactBLL _contactBLL;
 
-        public UserController(ILogger<UserController> logger, UserBLL userBLL)
+        public UserController(ILogger<UserController> logger, UserBLL userBLL, ContactBLL contactBLL)
         {
             _logger = logger;
             _userBLL = userBLL;
+            _contactBLL = contactBLL;
         }
 
         [HttpPost]
@@ -112,7 +115,18 @@ namespace ServerWebAPI.Controllers
                 if (string.IsNullOrWhiteSpace(userId))
                     return UnprocessableEntity("用户ID不能为空");
                 VUserProfile? user = await _userBLL.GetByProfileUserID(userId);
-                return Ok(user);
+                if (HttpContext.Items["User"] is not TUser self) return Unauthorized("HttpContext.Items[User] IS NULL");
+                bool isContact = false;
+                if (user != null)
+                {
+                    ContactEx? contact = await _contactBLL.GetBy2UserID(self.UserId, user.UserId);
+                    isContact = contact != null;
+                }
+                return Ok(new
+                {
+                    user,
+                    isContact
+                });
             }
             catch (Exception e)
             {
