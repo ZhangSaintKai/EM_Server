@@ -15,15 +15,13 @@ namespace ServerWebAPI.Controllers
         private readonly IWebHostEnvironment _environment;
         private readonly FileBLL _fileBLL;
         private readonly UseSHA _useSHA;
-        private readonly UserBLL _userBLL;
 
-        public FileController(IConfiguration configuration, IWebHostEnvironment environment, FileBLL fileBLL, UseSHA useSHA, UserBLL userBLL)
+        public FileController(IConfiguration configuration, IWebHostEnvironment environment, FileBLL fileBLL, UseSHA useSHA)
         {
             _configuration = configuration;
             _environment = environment;
             _fileBLL = fileBLL;
             _useSHA = useSHA;
-            _userBLL = userBLL;
         }
 
         [HttpGet]
@@ -118,15 +116,8 @@ namespace ServerWebAPI.Controllers
                     return StatusCode(403, "不存在此资源ID的文件");
                 if (file.OwnerType != OwnerType.Public.ToString())
                 {
-                    //放BLL
-                    if (string.IsNullOrWhiteSpace(fileToken))
-                        return StatusCode(403, "非公共文件的请求令牌不能为空");
-                    TUser? reqUser = await _userBLL.GetByFileToken(fileToken);
-                    if (reqUser == null)
-                        return StatusCode(403, "无效文件令牌");
-                    //if(file.OwnerId != reqUser.UserId)
-                    //    return StatusCode(403, "此文件不属于请求用户");
-                    //放BLL
+                    bool permission = await _fileBLL.CheckFilePermission(file, fileToken);
+                    if (!permission) return StatusCode(403, "没有权限");
                 }
                 // 构建文件的完整路径
                 string uploadFolder = GetFileCategoryFolder(file.FileType);
