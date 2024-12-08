@@ -216,6 +216,24 @@ namespace ServerWebAPI.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> UpdatePublicKey([FromBody] string publicKey)
+        {
+            try
+            {
+                if (HttpContext.Items["User"] is not TUser user) return Unauthorized("HttpContext.Items[User] IS NULL");
+                if (string.IsNullOrWhiteSpace(publicKey))
+                    return UnprocessableEntity("公钥不能为空");
+                user.PublicKey = publicKey;
+                await _userBLL.UpdateProfile(user);
+                return Ok("修改成功");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, "修改失败，" + e.Message);
+            }
+        }
+
         [HttpGet]
         public async Task<IActionResult> Logout()
         {
