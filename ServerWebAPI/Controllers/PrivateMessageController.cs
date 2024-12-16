@@ -41,10 +41,11 @@ namespace ServerWebAPI.Controllers
                 if (HttpContext.Items["User"] is not TUser user) return Unauthorized("HttpContext.Items[User] IS NULL");
                 string conversationId = body.ConversationId,
                     messageType = body.MessageType,
-                    content = body.Content;
+                    content = body.Content,
+                    signature = body.Signature;
                 string? source = body.Source,
                     replyFor = body.ReplyFor;
-                TPrivateMessage newMessage = await _messageBLL.Send(user.UserId, conversationId, messageType, content, source, replyFor);
+                TPrivateMessage newMessage = await _messageBLL.Send(user.UserId, conversationId, messageType, content, signature, source, replyFor);
                 return Ok(new
                 {
                     messageId = newMessage.MessageId.ToString(),

@@ -8,6 +8,8 @@
 
         public string Content { get; set; } = null!;
 
+        public string Signature { get; set; } = null!;
+
         public string? Source { get; set; }
 
         public string? ReplyFor { get; set; }

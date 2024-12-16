@@ -30,7 +30,7 @@ namespace ServerWebAPI.BLL
             return messageExList;
         }
 
-        public async Task<TPrivateMessage> Send(string userId, string conversationId, string messageType, string content, string? source, string? replyFor)
+        public async Task<TPrivateMessage> Send(string userId, string conversationId, string messageType, string content, string signature, string? source, string? replyFor)
         {
             PrivateConversationEx conversation = await _conversationBLL.GetByIDUserID(conversationId, userId) ?? throw new Exception("当前登录用户不是该会话中的成员");
             TPrivateMessage message = new()
@@ -38,6 +38,7 @@ namespace ServerWebAPI.BLL
                 MemberId = conversation.MemberId,
                 MessageType = messageType,
                 Content = content,
+                Signature = signature,
                 Source = source,
                 ReplyFor = replyFor,
                 SendTime = DateTime.Now,

@@ -66,6 +66,7 @@ namespace ServerWebAPI.DAL
                     SenderMemberId = m.MemberId ?? null,
                     MessageType = m.MessageType ?? null,
                     Content = m.Content ?? null,
+                    Signature = m.Signature ?? null,
                     Source = m.Source ?? null,
                     ReplyFor = m.ReplyFor ?? null,
                     SendTime = m.SendTime,

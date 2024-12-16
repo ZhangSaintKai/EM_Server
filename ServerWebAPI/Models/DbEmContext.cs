@@ -116,11 +116,12 @@ public partial class DbEmContext : DbContext
             entity.ToTable("t_group_message");
 
             entity.Property(e => e.MessageId).HasColumnType("bigint(20)");
-            entity.Property(e => e.Content).HasMaxLength(255);
+            entity.Property(e => e.Content).HasColumnType("text");
             entity.Property(e => e.MemberId).HasMaxLength(255);
             entity.Property(e => e.MessageType).HasMaxLength(255);
             entity.Property(e => e.ReplyFor).HasMaxLength(255);
             entity.Property(e => e.SendTime).HasColumnType("datetime(3)");
+            entity.Property(e => e.Signature).HasColumnType("text");
             entity.Property(e => e.Source).HasMaxLength(255);
         });
 
@@ -163,12 +164,13 @@ public partial class DbEmContext : DbContext
             entity.ToTable("t_private_message");
 
             entity.Property(e => e.MessageId).HasColumnType("bigint(20)");
-            entity.Property(e => e.Content).HasMaxLength(255);
+            entity.Property(e => e.Content).HasColumnType("text");
             entity.Property(e => e.MemberId).HasMaxLength(255);
             entity.Property(e => e.MessageType).HasMaxLength(255);
             entity.Property(e => e.ReadTime).HasColumnType("datetime(3)");
             entity.Property(e => e.ReplyFor).HasMaxLength(255);
             entity.Property(e => e.SendTime).HasColumnType("datetime(3)");
+            entity.Property(e => e.Signature).HasColumnType("text");
             entity.Property(e => e.Source).HasMaxLength(255);
         });
 
@@ -190,7 +192,7 @@ public partial class DbEmContext : DbContext
             entity.Property(e => e.FileToken).HasMaxLength(255);
             entity.Property(e => e.NickName).HasMaxLength(255);
             entity.Property(e => e.Password).HasMaxLength(255);
-            entity.Property(e => e.PublicKey).HasMaxLength(255);
+            entity.Property(e => e.PublicKey).HasColumnType("text");
             entity.Property(e => e.Token).HasComment("只是表示在设计表时规定最大长度为255个字符，但实际存储的数据长度可以超过这个限制");
             entity.Property(e => e.UpdateTime).HasColumnType("datetime(3)");
         });
@@ -234,7 +236,7 @@ public partial class DbEmContext : DbContext
                 .HasNoKey()
                 .ToView("v_p_conversation_message");
 
-            entity.Property(e => e.Content).HasMaxLength(255);
+            entity.Property(e => e.Content).HasColumnType("text");
             entity.Property(e => e.ConversationId).HasMaxLength(255);
             entity.Property(e => e.MemberId).HasMaxLength(255);
             entity.Property(e => e.MessageId).HasColumnType("bigint(20)");
@@ -242,6 +244,7 @@ public partial class DbEmContext : DbContext
             entity.Property(e => e.ReadTime).HasColumnType("datetime(3)");
             entity.Property(e => e.ReplyFor).HasMaxLength(255);
             entity.Property(e => e.SendTime).HasColumnType("datetime(3)");
+            entity.Property(e => e.Signature).HasColumnType("text");
             entity.Property(e => e.Source).HasMaxLength(255);
             entity.Property(e => e.UserId).HasMaxLength(255);
         });
@@ -258,7 +261,7 @@ public partial class DbEmContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("EMID");
             entity.Property(e => e.NickName).HasMaxLength(255);
-            entity.Property(e => e.PublicKey).HasMaxLength(255);
+            entity.Property(e => e.PublicKey).HasColumnType("text");
             entity.Property(e => e.UpdateTime).HasColumnType("datetime(3)");
             entity.Property(e => e.UserId).HasMaxLength(255);
         });
