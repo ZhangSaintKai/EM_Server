@@ -15,13 +15,14 @@
 #### （
 ##### 转SQLServer：
 ##### 类DbEmContext修改：optionsBuilder.UseSqlServer("name=ConnectionStrings:Database_EM");
-##### "ConnectionStrings:Database_EM": "Server=.;Database=db_em;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;"
+##### "ConnectionStrings:Database_EM": "Server=DESKTOP-XXXXXXX\SQLEXPRESS;Database=db_em;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;"
 ##### 项目目录下PowerShell执行
 ##### dotnet add package Microsoft.EntityFrameworkCore.SqlServer -v 7.0.15
 ##### dotnet ef migrations add InitialCreate
-##### Migrations下对应类修改：PRIMARY加唯一标识、datetime(3)改datetime、bigint(20)改bigint、int(1)改int
+##### Migrations下对应类修改：PRIMARY加唯一标识(如表名后缀)、datetime(3)改datetime、bigint(20)改bigint、int(1)改int
 ##### 建数据库db_em
 ##### dotnet ef database update
+##### 手动补建视图
 #### ）
 ####
 #### 自签名pfx证书生成
