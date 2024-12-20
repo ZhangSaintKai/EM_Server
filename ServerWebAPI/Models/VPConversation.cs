@@ -19,7 +19,7 @@ public partial class VPConversation
 
     public long? NewestMessageId { get; set; }
 
-    public long? UnreadCount { get; set; }
+    public int? UnreadCount { get; set; }
 
     public DateTime CreateTime { get; set; }
 
