@@ -21,7 +21,10 @@
 ##### dotnet ef migrations add InitialCreate
 ##### Migrations下对应类修改：PRIMARY加唯一标识(如表名后缀)、datetime(3)改datetime、bigint(20)改bigint、int(1)改int
 ##### 建数据库db_em
+##### ~~“对于新数据库：右键单击“数据库”，然后选择“新建数据库”。如果不希望使用默认排序规则，则选择“选项”页，然后从“排序规则”下拉列表中选择某一排序规则。”~~
 ##### dotnet ef database update
+##### 设置消息表自增Id起始值 DBCC CHECKIDENT ('t_private_message', RESEED, 1000000000000221024);
+##### ~~“UTF-8受char和varchar数据类型支持，并在创建对象的排序规则或将其更改为带有UTF8后缀的排序规则时启用。例如，将LATIN1_GENERAL_100_CI_AS_SC更改为LATIN1_GENERAL_100_CI_AS_SC_UTF8。”~~
 ##### 手动补建视图
 #### ）
 ####
