@@ -1,3 +1,4 @@
+#### .NET6WebAPI项目，需要安装.NET6或以上构建工具和运行时
 #### NuGet包：
 #### microsoft.entityframeworkcore\7.0.15
 #### microsoft.entityframeworkcore.design\7.0.15
@@ -13,7 +14,7 @@
 #### 数据库表更新时，使用-Force覆盖现有文件
 #### 
 #### （
-##### 转SQLServer：
+##### 转SQLServer（v2022）：
 ##### 类DbEmContext修改：optionsBuilder.UseSqlServer("name=ConnectionStrings:Database_EM");
 ##### "ConnectionStrings:Database_EM": "Server=DESKTOP-XXXXXXX\SQLEXPRESS;Database=db_em;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;"
 ##### 项目目录下PowerShell执行
@@ -26,7 +27,7 @@
 ##### 设置消息表自增Id起始值 DBCC CHECKIDENT ('t_private_message', RESEED, 1000000000000221024);
 ##### ~~“UTF-8受char和varchar数据类型支持，并在创建对象的排序规则或将其更改为带有UTF8后缀的排序规则时启用。例如，将LATIN1_GENERAL_100_CI_AS_SC更改为LATIN1_GENERAL_100_CI_AS_SC_UTF8。”~~
 ##### 手动补建视图
-##### 发布后在部署环境安装windowsdesktop-runtime-6.0.36-win-x64，aspnetcore-runtime-6.0.36-win-x64
+##### 发布后在部署环境安装windowsdesktop-runtime-6.0.36-win-x64、aspnetcore-runtime-6.0.36-win-x64
 #### ）
 ####
 #### 自签名pfx证书生成
