@@ -26,6 +26,7 @@
 ##### 设置消息表自增Id起始值 DBCC CHECKIDENT ('t_private_message', RESEED, 1000000000000221024);
 ##### ~~“UTF-8受char和varchar数据类型支持，并在创建对象的排序规则或将其更改为带有UTF8后缀的排序规则时启用。例如，将LATIN1_GENERAL_100_CI_AS_SC更改为LATIN1_GENERAL_100_CI_AS_SC_UTF8。”~~
 ##### 手动补建视图
+##### 发布后在部署环境安装windowsdesktop-runtime-6.0.36-win-x64，aspnetcore-runtime-6.0.36-win-x64
 #### ）
 ####
 #### 自签名pfx证书生成
