@@ -63,9 +63,11 @@ namespace ServerWebAPI.Controllers
                 string fileStorageName = $"{fileId}.{extension}";
                 // 拼接保存目录与文件存储名
                 string filePath = Path.Combine(uploadFolder, fileStorageName);
-                // 保存
-                FileStream? stream = new(filePath, FileMode.Create);
-                await EM_Client_File.CopyToAsync(stream);
+                // 保存，使用using确保FileStream在操作完成后自动关闭
+                using (FileStream stream = new(filePath, FileMode.Create))
+                {
+                    await EM_Client_File.CopyToAsync(stream);
+                }
                 await _fileBLL.SaveFileAndRefer(fileId, EM_Client_File.FileName, EM_Client_File.ContentType, fileStorageName, ownerType.ToString(), ownerId);
                 //return Ok($"文件 {EM_Client_File.FileName} 上传成功");
                 return Ok(new { FileId = fileId });
@@ -109,11 +111,9 @@ namespace ServerWebAPI.Controllers
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(fileId))
-                    return StatusCode(403, "文件资源ID不能为空");
+                if (string.IsNullOrWhiteSpace(fileId)) throw new Exception("文件资源ID不能为空");
                 TFile? file = await _fileBLL.GetById(fileId);
-                if (file == null)
-                    return StatusCode(403, "不存在此资源ID的文件");
+                if (file == null) throw new Exception("资源ID不存在");
                 if (file.OwnerType != OwnerType.Public.ToString())
                 {
                     bool permission = await _fileBLL.CheckFilePermission(file, fileToken);
@@ -122,15 +122,47 @@ namespace ServerWebAPI.Controllers
                 // 构建文件的完整路径
                 string uploadFolder = GetFileCategoryFolder(file.FileType);
                 string fullPath = Path.Combine(uploadFolder, file.FileStorageName);
-
+                // 返回文件
                 if (System.IO.File.Exists(fullPath))
                     return PhysicalFile(fullPath, file.FileType, file.FileName, true);
                 else
-                    return NotFound();
+                    throw new Exception("文件不存在");
             }
             catch (Exception e)
             {
                 return StatusCode(500, $"加载失败: {e.Message}");
+            }
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ReadFile(string fileId, string? fileToken)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(fileId)) throw new Exception("文件资源ID不能为空");
+                TFile? file = await _fileBLL.GetById(fileId);
+                if (file == null) throw new Exception("资源ID不存在");
+                if (file.OwnerType != OwnerType.Public.ToString())
+                {
+                    bool permission = await _fileBLL.CheckFilePermission(file, fileToken);
+                    if (!permission) return StatusCode(403, "没有权限");
+                }
+                await _fileBLL.Delete(file);
+                // 构建文件的完整路径
+                string uploadFolder = GetFileCategoryFolder(file.FileType);
+                string fullPath = Path.Combine(uploadFolder, file.FileStorageName);
+                // 删除文件
+                if (System.IO.File.Exists(fullPath))
+                {
+                    System.IO.File.Delete(fullPath);
+                    return Ok($"文件“{file.FileName}”已阅后即焚");
+                }
+                else throw new Exception("文件不存在");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"标记已读失败: {e.Message}");
             }
 
         }

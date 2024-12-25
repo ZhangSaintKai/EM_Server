@@ -68,5 +68,10 @@ namespace ServerWebAPI.BLL
         {
             return await _fileDAL.GetById(fileId);
         }
+
+        public async Task Delete(TFile file)
+        {
+            await _fileDAL.Delete(file);
+        }
     }
 }

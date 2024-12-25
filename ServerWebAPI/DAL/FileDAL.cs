@@ -28,5 +28,11 @@ namespace ServerWebAPI.DAL
             IQueryable<TFile> query = _emContext.TFiles.Where(f => f.FileId == fileId);
             return await query.SingleOrDefaultAsync();
         }
+
+        public async Task Delete(TFile file)
+        {
+            _emContext.TFiles.Remove(file);
+            await _emContext.SaveChangesAsync();
+        }
     }
 }
