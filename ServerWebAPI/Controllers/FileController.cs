@@ -143,7 +143,11 @@ namespace ServerWebAPI.Controllers
                 if (string.IsNullOrWhiteSpace(fileId)) throw new Exception("文件资源ID不能为空");
                 TFile? file = await _fileBLL.GetById(fileId);
                 if (file == null) throw new Exception("资源ID不存在");
-                if (file.OwnerType != OwnerType.Public.ToString())
+                if (file.OwnerType == OwnerType.Public.ToString())
+                {
+                    throw new Exception("公共文件不可删除!!!");
+                }
+                else
                 {
                     bool permission = await _fileBLL.CheckFilePermission(file, fileToken);
                     if (!permission) return StatusCode(403, "没有权限");
@@ -156,13 +160,13 @@ namespace ServerWebAPI.Controllers
                 if (System.IO.File.Exists(fullPath))
                 {
                     System.IO.File.Delete(fullPath);
-                    return Ok($"文件“{file.FileName}”已阅后即焚");
+                    return Ok($"文件“{file.FileName}”已删除");
                 }
                 else throw new Exception("文件不存在");
             }
             catch (Exception e)
             {
-                return StatusCode(500, $"标记已读失败: {e.Message}");
+                return StatusCode(500, $"阅后即焚失败: {e.Message}");
             }
 
         }

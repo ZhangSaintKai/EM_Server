@@ -1,4 +1,6 @@
-﻿using ServerWebAPI.Commons.Algorithm;
+﻿using Microsoft.VisualBasic.FileIO;
+using ServerWebAPI.Commons.Algorithm;
+using ServerWebAPI.Commons.Enum;
 using ServerWebAPI.DAL;
 using ServerWebAPI.Models;
 using ServerWebAPI.Services;
@@ -8,13 +10,15 @@ namespace ServerWebAPI.BLL
     public class UserBLL
     {
         private readonly UserDAL _userDAL;
+        private readonly FileDAL _fileDAL;
         private readonly UseSHA _useSHA;
         private readonly WebSocketService _wss;
 
         // 依赖注入 UserDAL实例
-        public UserBLL(UserDAL userDAL, UseSHA useSHA, WebSocketService webSocketService)
+        public UserBLL(UserDAL userDAL, FileDAL fileDAL, UseSHA useSHA, WebSocketService webSocketService)
         {
             _userDAL = userDAL;
+            _fileDAL = fileDAL;
             _useSHA = useSHA;
             _wss = webSocketService;
         }
@@ -33,13 +37,24 @@ namespace ServerWebAPI.BLL
                 Emid = username,
                 NickName = username,
                 PublicKey = _useSHA.NoSaltToString(Guid.NewGuid().ToString()), // 暂占位
-                Avatar = "default-avatar.png",
+                Avatar = Guid.NewGuid().ToString(),
                 Token = _useSHA.WithSaltToString(username, Guid.NewGuid().ToString()),
                 FileToken = _useSHA.NoSaltToString(Guid.NewGuid().ToString()),
                 CreateTime = DateTime.Now,
                 UpdateTime = DateTime.Now,
             };
             await _userDAL.Create(user);
+            TFile file = new()
+            {
+                FileId = user.Avatar,
+                FileName = "default-avatar.png",
+                FileType = "image/jpeg",
+                FileStorageName = "default-avatar.png",
+                OwnerType = OwnerType.Public.ToString(),
+                OwnerId = user.UserId,
+                CreateTime = DateTime.Now
+            };
+            await _fileDAL.Create(file);
         }
 
         public async Task<TUser?> Login(string username, string password)
