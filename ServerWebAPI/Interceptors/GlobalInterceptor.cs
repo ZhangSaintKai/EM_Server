@@ -24,7 +24,7 @@ namespace ServerWebAPI.Interceptors
             string? actionName = routeData.Values["action"]?.ToString();
             string currentRoute = controllerName + "/" + actionName;
             //排除的路由
-            string[] passRoutesArray = { "User/Register", "User/Login", "Client/CheckUpdate", "Client/GetPkgWgt", "File/GetAllowedMimes", "WebSocket/Connect" };
+            string[] passRoutesArray = { "User/Register", "User/Login", "Client/CheckUpdate", "Client/GetPkgWgt", "File/GetAllowedMimes", "File/GetFile", "WebSocket/Connect" };
             bool isPass = passRoutesArray.Any(r => r.Equals(currentRoute, StringComparison.OrdinalIgnoreCase));
             if (isPass)
             {
