@@ -13,28 +13,27 @@ var builder = WebApplication.CreateBuilder(args);
 
 var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 Console.WriteLine(environment);
-//生产环境的HTTPS额外配置自签名证书
-//if (environment != "Development")
+//本机局域网IPv4地址
+var LocalIpAddress = NetworkInterface.GetAllNetworkInterfaces()
+        .Where(nic => nic.OperationalStatus == OperationalStatus.Up)
+        .SelectMany(nic => nic.GetIPProperties().UnicastAddresses)
+        .Where(addr => addr.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+        .Select(addr => addr.Address).First();
+// 从 appsettings.json 中读取端口
+int port = builder.Configuration.GetValue<int>("SSLPort");
+// 从 secret.json 中读取证书
+var configurationbuilder = new ConfigurationBuilder();
+configurationbuilder.AddUserSecrets<Program>();
+var configurationSecrets = configurationbuilder.Build();
+var certificatePath = configurationSecrets.GetRequiredSection("SSLCertificate").GetValue<string>("Path");
+var certificatePassword = configurationSecrets["SSLCertificate:Password"];
+
+// 配置Kestrel使用证书
+builder.WebHost.ConfigureKestrel(options =>
 {
-    //本机局域网IPv4地址
-    var LocalIpAddress = NetworkInterface.GetAllNetworkInterfaces()
-            .Where(nic => nic.OperationalStatus == OperationalStatus.Up)
-            .SelectMany(nic => nic.GetIPProperties().UnicastAddresses)
-            .Where(addr => addr.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-            .Select(addr => addr.Address).First();
-    // 从 appsettings.json 中读取端口
-    int port = builder.Configuration.GetValue<int>("SSLPort");
-    // 从 secret.json 中读取证书
-    var configurationbuilder = new ConfigurationBuilder();
-    configurationbuilder.AddUserSecrets<Program>();
-    var configurationSecrets = configurationbuilder.Build();
-    var certificatePath = configurationSecrets.GetRequiredSection("SSLCertificate").GetValue<string>("Path");
-    var certificatePassword = configurationSecrets["SSLCertificate:Password"];
 
-    // 配置Kestrel使用证书
-    builder.WebHost.ConfigureKestrel(options =>
+    if (environment == "Development")
     {
-
         options.Listen(LocalIpAddress, 5244);
 
         // 自签名证书(不受信任)覆盖开发配置launchSettings.json(证书受信任)
@@ -42,15 +41,17 @@ Console.WriteLine(environment);
         {
             listenOptions.UseHttps(certificatePath, certificatePassword);
         });
-
-        // 生产环境使用
+    }
+    //生产环境的HTTPS额外配置自签名证书
+    else
+    {
         options.Listen(LocalIpAddress, port, listenOptions =>
-        {
-            listenOptions.UseHttps(certificatePath, certificatePassword);
-        });
+            {
+                listenOptions.UseHttps(certificatePath, certificatePassword);
+            });
+    }
 
-    });
-}
+});
 
 
 // Add services to the container.
