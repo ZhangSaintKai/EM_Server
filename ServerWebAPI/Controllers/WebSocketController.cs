@@ -74,7 +74,9 @@ namespace ServerWebAPI.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine($"建立WebSocket连接异常: {e.Message}");
+                webSocket.Dispose(); // 释放资源
+                _wss.RemoveInvalidStateWS(); // 移除WS池中无效的记录
+                Console.WriteLine($"WebSocket连接异常: {e.Message}");
             }
         }
 

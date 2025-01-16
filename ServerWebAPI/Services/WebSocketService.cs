@@ -35,10 +35,31 @@ namespace ServerWebAPI.Services
 
         public WebSocket? GetWS(Guid userId)
         {
-            if (websocketPool.TryGetValue(userId, out WebSocket? websocket))
+            if (websocketPool.TryGetValue(userId, out WebSocket? websocket)
+                && (websocket.State == WebSocketState.Open || websocket.State == WebSocketState.CloseReceived))
                 return websocket;
             else
                 return null;
+        }
+
+        public void RemoveInvalidStateWS()
+        {
+            foreach (Guid id in websocketPool.Keys.ToArray()) // 获取websocketPool快照的Keys
+            {
+                if (websocketPool.TryGetValue(id, out WebSocket? websocket)
+                    && websocket.State != WebSocketState.Open && websocket.State != WebSocketState.CloseReceived)
+                {
+                    websocketPool.TryRemove(id, out _);
+                }
+            }
+            Console.WriteLine($"———————————————————————————————");
+            Console.WriteLine($"Removed Invalid State！");
+            Console.WriteLine($"Current WS Pool：");
+            foreach (Guid id in websocketPool.Keys)
+            {
+                Console.WriteLine($"                {id}");
+            };
+            Console.WriteLine($"———————————————————————————————");
         }
 
         public ConcurrentDictionary<Guid, WebSocket> GetAllWS()
