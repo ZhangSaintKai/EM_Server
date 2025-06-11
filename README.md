@@ -1,4 +1,4 @@
-# EM-Server
+# EM-Server Project
 
 ## 项目要求
 - .NET 6 WebAPI项目
@@ -19,7 +19,7 @@
 - SSLCertificate:Path
 - SSLCertificate:Password
 
-## 数据库设置
+## 数据库配置 （SQLServer v2022）
 ### 采用Code First模式，配置步骤
 1. 在项目目录下PowerShell执行：
    ```powershell
