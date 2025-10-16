@@ -42,7 +42,7 @@ namespace ServerWebAPI.Controllers
 
         [HttpPost]
         [RequestSizeLimit(100_000_000)] // 允许的请求正文的最大大小（以字节为单位）
-        public async Task<IActionResult> Upload(IFormFile EM_Client_File, string ownerId, OwnerType ownerType)
+        public async Task<IActionResult> Upload(IFormFile EM_Client_File, string ownerId, PermissionType permissionType)
         {
             if (EM_Client_File == null || EM_Client_File.Length == 0)
                 return UnprocessableEntity("文件不能为空");
@@ -68,7 +68,7 @@ namespace ServerWebAPI.Controllers
                 {
                     await EM_Client_File.CopyToAsync(stream);
                 }
-                await _fileBLL.SaveFileAndRefer(fileId, EM_Client_File.FileName, EM_Client_File.ContentType, fileStorageName, ownerType.ToString(), ownerId);
+                await _fileBLL.SaveFileAndRefer(fileId, EM_Client_File.FileName, EM_Client_File.ContentType, fileStorageName, permissionType.ToString(), ownerId);
                 //return Ok($"文件 {EM_Client_File.FileName} 上传成功");
                 return Ok(new { FileId = fileId });
             }
@@ -114,7 +114,7 @@ namespace ServerWebAPI.Controllers
                 if (string.IsNullOrWhiteSpace(fileId)) throw new Exception("文件资源ID不能为空");
                 TFile? file = await _fileBLL.GetById(fileId);
                 if (file == null) throw new Exception("资源ID不存在");
-                if (file.OwnerType != OwnerType.Public.ToString())
+                if (file.PermissionType != PermissionType.Public.ToString())
                 {
                     bool permission = await _fileBLL.CheckFilePermission(file, fileToken);
                     if (!permission) return StatusCode(403, "没有权限");
@@ -143,7 +143,7 @@ namespace ServerWebAPI.Controllers
                 if (string.IsNullOrWhiteSpace(fileId)) throw new Exception("文件资源ID不能为空");
                 TFile? file = await _fileBLL.GetById(fileId);
                 if (file == null) throw new Exception("资源ID不存在");
-                if (file.OwnerType == OwnerType.Public.ToString())
+                if (file.PermissionType == PermissionType.Public.ToString())
                 {
                     throw new Exception("公共文件不可删除!!!");
                 }

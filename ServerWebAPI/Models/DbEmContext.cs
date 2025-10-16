@@ -74,7 +74,7 @@ public partial class DbEmContext : DbContext
             entity.Property(e => e.FileStorageName).HasMaxLength(255);
             entity.Property(e => e.FileType).HasMaxLength(255);
             entity.Property(e => e.OwnerId).HasMaxLength(255);
-            entity.Property(e => e.OwnerType).HasMaxLength(255);
+            entity.Property(e => e.PermissionType).HasMaxLength(255);
         });
 
         modelBuilder.Entity<TGroupConversation>(entity =>

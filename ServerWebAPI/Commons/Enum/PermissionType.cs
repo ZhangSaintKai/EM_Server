@@ -1,6 +1,6 @@
 ﻿namespace ServerWebAPI.Commons.Enum
 {
-    public enum OwnerType
+    public enum PermissionType
     {
         /// <summary>
         /// 默认：公开，无限制

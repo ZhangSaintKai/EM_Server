@@ -23,7 +23,7 @@ namespace ServerWebAPI.BLL
             return await _fileDAL.IsExist(fileId);
         }
 
-        public async Task SaveFileAndRefer(string fileId, string fileName, string fileType, string fileStorageName, string ownerType, string ownerId)
+        public async Task SaveFileAndRefer(string fileId, string fileName, string fileType, string fileStorageName, string permissionType, string ownerId)
         {
             TFile file = new()
             {
@@ -31,7 +31,7 @@ namespace ServerWebAPI.BLL
                 FileName = fileName,
                 FileType = fileType,
                 FileStorageName = fileStorageName,
-                OwnerType = ownerType,
+                PermissionType = permissionType,
                 OwnerId = ownerId,
                 CreateTime = DateTime.Now
             };
@@ -44,19 +44,19 @@ namespace ServerWebAPI.BLL
                 throw new Exception("非公共文件的请求令牌不能为空");
             TUser? reqUser = await _userBLL.GetByFileToken(fileToken);
             if (reqUser == null) throw new Exception("无效文件令牌");
-            if (file.OwnerType == OwnerType.Conversation.ToString())
+            if (file.PermissionType == PermissionType.Conversation.ToString())
             {
                 List<PrivateConversationEx> conversationExList = await _privateConversationBLL.GetListByUserID(reqUser.UserId);
                 PrivateConversationEx? conversationEx = conversationExList.Find(e => e.ConversationId == file.OwnerId);
                 //此文件不属于请求用户的会话
                 if (conversationEx == null) return false;
             }
-            if (file.OwnerType == OwnerType.Member.ToString())
+            if (file.PermissionType == PermissionType.Member.ToString())
             {
-                //此文件不属于请求用户的会话成员
+                //此文件不属于请求用户的会话成员（暂未使用，未实现）
                 return false;
             }
-            if (file.OwnerType == OwnerType.User.ToString())
+            if (file.PermissionType == PermissionType.User.ToString())
             {
                 //此文件不属于请求用户
                 if (file.OwnerId != reqUser.UserId) return false;

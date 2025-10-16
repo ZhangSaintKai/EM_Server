@@ -13,7 +13,7 @@ public partial class TFile
 
     public string FileStorageName { get; set; } = null!;
 
-    public string OwnerType { get; set; } = null!;
+    public string PermissionType { get; set; } = null!;
 
     public string? OwnerId { get; set; }
 

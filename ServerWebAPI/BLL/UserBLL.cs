@@ -50,7 +50,7 @@ namespace ServerWebAPI.BLL
                 FileName = "default-avatar.png",
                 FileType = "image/jpeg",
                 FileStorageName = "default-avatar.png",
-                OwnerType = OwnerType.Public.ToString(),
+                PermissionType = PermissionType.Public.ToString(),
                 OwnerId = user.UserId,
                 CreateTime = DateTime.Now
             };
