@@ -13,7 +13,7 @@ namespace ServerWebAPI.DAL
             _emContext = emContext;
         }
 
-        public async Task<ContactEx?> GetBy2UserID(string userId, string contactUserId)
+        public async Task<ContactEx?> GetBy2UserID(Guid userId, Guid contactUserId)
         {
             IQueryable<ContactEx> query =
                 from c in _emContext.TContacts
@@ -37,7 +37,7 @@ namespace ServerWebAPI.DAL
             await _emContext.SaveChangesAsync();
         }
 
-        public async Task<List<ContactEx>> GetListByUserID(string userId)
+        public async Task<List<ContactEx>> GetListByUserID(Guid userId)
         {
             IQueryable<ContactEx> query =
                 from c in _emContext.TContacts
@@ -55,7 +55,7 @@ namespace ServerWebAPI.DAL
             return await query.ToListAsync();
 
         }
-        public async Task<ContactEx?> GetByID(string contactId)
+        public async Task<ContactEx?> GetByID(Guid contactId)
         {
             IQueryable<ContactEx> query =
                 from c in _emContext.TContacts

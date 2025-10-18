@@ -5,13 +5,13 @@ namespace ServerWebAPI.Models;
 
 public partial class VPConversationMember
 {
-    public string ConversationId { get; set; } = null!;
+    public Guid ConversationId { get; set; }
 
-    public string MemberId { get; set; } = null!;
+    public Guid MemberId { get; set; }
 
-    public string UserId { get; set; } = null!;
+    public Guid UserId { get; set; }
 
-    public string? OtherMemberId { get; set; }
+    public Guid? OtherMemberId { get; set; }
 
-    public string? OtherUserId { get; set; }
+    public Guid? OtherUserId { get; set; }
 }

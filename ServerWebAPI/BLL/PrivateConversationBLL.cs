@@ -15,18 +15,18 @@ namespace ServerWebAPI.BLL
             _userBLL = userBLL;
         }
 
-        public async Task<List<PrivateConversationEx>> GetListByUserID(string userId)
+        public async Task<List<PrivateConversationEx>> GetListByUserID(Guid userId)
         {
             List<PrivateConversationEx> conversationExList = await _conversationDAL.GetListByUserID(userId);
             return conversationExList;
         }
 
-        public async Task<PrivateConversationEx?> GetByIDUserID(string conversationId, string userId)
+        public async Task<PrivateConversationEx?> GetByIDUserID(Guid conversationId, Guid userId)
         {
             return await _conversationDAL.GetByIDUserID(conversationId, userId);
         }
 
-        public async Task<PrivateConversationEx?> Create(string userId, string otherUserId)
+        public async Task<PrivateConversationEx?> Create(Guid userId, Guid otherUserId)
         {
 
             VUserProfile? otherUser = await _userBLL.GetByProfileUserID(otherUserId) ?? throw new Exception("私聊对象用户不存在");
@@ -35,7 +35,7 @@ namespace ServerWebAPI.BLL
             //不存在私聊会话时，创建新会话
             if (conversation == null)
             {
-                string conversationId = Guid.NewGuid().ToString();
+                Guid conversationId = Guid.NewGuid();
                 TPrivateConversation conversationNew = new()
                 {
                     ConversationId = conversationId,
@@ -44,7 +44,7 @@ namespace ServerWebAPI.BLL
                 };
                 TPrivateMember self = new()
                 {
-                    MemberId = Guid.NewGuid().ToString(),
+                    MemberId = Guid.NewGuid(),
                     ConversationId = conversationId,
                     UserId = userId,
                     CreateTime = DateTime.Now,
@@ -52,7 +52,7 @@ namespace ServerWebAPI.BLL
                 };
                 TPrivateMember other = new()
                 {
-                    MemberId = Guid.NewGuid().ToString(),
+                    MemberId = Guid.NewGuid(),
                     ConversationId = conversationId,
                     UserId = otherUserId,
                     CreateTime = DateTime.Now,

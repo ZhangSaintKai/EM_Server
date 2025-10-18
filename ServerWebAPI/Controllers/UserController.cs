@@ -108,11 +108,11 @@ namespace ServerWebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetProfile(string userId)
+        public async Task<IActionResult> GetProfile(Guid userId)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(userId))
+                if (userId == Guid.Empty)
                     return UnprocessableEntity("用户ID不能为空");
                 VUserProfile? user = await _userBLL.GetByProfileUserID(userId);
                 if (HttpContext.Items["User"] is not TUser self) return Unauthorized("HttpContext.Items[User] IS NULL");
@@ -135,12 +135,12 @@ namespace ServerWebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateAvatar([FromBody] string avatar)
+        public async Task<IActionResult> UpdateAvatar([FromBody] Guid avatar)
         {
             try
             {
                 if (HttpContext.Items["User"] is not TUser user) return Unauthorized("HttpContext.Items[User] IS NULL");
-                if (string.IsNullOrWhiteSpace(avatar))
+                if (avatar == Guid.Empty)
                     return UnprocessableEntity("头像文件资源ID不能为空");
                 user.Avatar = avatar;
                 await _userBLL.UpdateProfile(user);

@@ -5,14 +5,13 @@ namespace ServerWebAPI.ModelsEx
 {
     public class PrivateConversationEx
     {
-        public string ConversationId { get; set; } = null!;
+        public Guid ConversationId { get; set; }
 
-        public string MemberId { get; set; } = null!;
-
-        public string UserId { get; set; } = null!;
+        public Guid MemberId { get; set; }
+        public Guid UserId { get; set; }
 
         // one element member List
-        public string? OtherMemberId { get; set; }
+        public Guid? OtherMemberId { get; set; }
 
         public VUserProfile? OtherUser { get; set; }
 
@@ -22,7 +21,7 @@ namespace ServerWebAPI.ModelsEx
         // NewestMessage
         public string? NewestMessageId { get; set; }
 
-        public string? SenderMemberId { get; set; }
+        public Guid? SenderMemberId { get; set; }
 
         public string? MessageType { get; set; }
 
@@ -30,16 +29,16 @@ namespace ServerWebAPI.ModelsEx
 
         public string? Signature { get; set; }
 
-        public string? Source { get; set; }
+        public Guid? Source { get; set; }
 
-        public string? ReplyFor { get; set; }
+        public Guid? ReplyFor { get; set; }
 
         public DateTime? SendTime { get; set; }
 
         public bool? Read { get; set; }
         // NewestMessage
 
-        public long? UnreadCount { get; set; }
+        public int? UnreadCount { get; set; }
 
         public DateTime CreateTime { get; set; }
 

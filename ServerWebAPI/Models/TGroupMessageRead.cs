@@ -5,9 +5,9 @@ namespace ServerWebAPI.Models;
 
 public partial class TGroupMessageRead
 {
-    public string MessageId { get; set; } = null!;
+    public long MessageId { get; set; }
 
-    public string MemberId { get; set; } = null!;
+    public Guid MemberId { get; set; }
 
     public bool Read { get; set; }
 

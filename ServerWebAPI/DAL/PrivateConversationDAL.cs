@@ -17,7 +17,7 @@ namespace ServerWebAPI.DAL
         /*
          * 根据自身用户Id和对方用户Id查询是否已有私聊会话成员处于同一会话中
         */
-        public async Task<PrivateConversationEx?> GetBy2UserID(string userId, string otherUserId)
+        public async Task<PrivateConversationEx?> GetBy2UserID(Guid userId, Guid otherUserId)
         {
             IQueryable<PrivateConversationEx> query =
                 from c in _emContext.VPConversations
@@ -32,17 +32,17 @@ namespace ServerWebAPI.DAL
                     MemberId = c.MemberId,
                     UserId = c.UserId,
                     OtherMemberId = c.OtherMemberId,
-                    OtherUser = u ?? null,
-                    NewestMessageId = m.MessageId.ToString() ?? null,
-                    SenderMemberId = m.MemberId ?? null,
-                    MessageType = m.MessageType ?? null,
-                    Content = m.Content ?? null,
-                    Signature = m.Signature ?? null,
-                    Source = m.Source ?? null,
-                    ReplyFor = m.ReplyFor ?? null,
+                    OtherUser = u,
+                    NewestMessageId = m.MessageId.ToString(),
+                    SenderMemberId = m.MemberId,
+                    MessageType = m.MessageType,
+                    Content = m.Content,
+                    Signature = m.Signature,
+                    Source = m.Source,
+                    ReplyFor = m.ReplyFor,
                     SendTime = m.SendTime,
                     Read = m.Read,
-                    Remark = c.Remark ?? null,
+                    Remark = c.Remark,
                     UnreadCount = c.UnreadCount,
                     CreateTime = c.CreateTime,
                     UpdateTime = c.UpdateTime,
@@ -57,7 +57,7 @@ namespace ServerWebAPI.DAL
             await _emContext.SaveChangesAsync(true);
         }
 
-        public async Task<List<PrivateConversationEx>> GetListByUserID(string userId)
+        public async Task<List<PrivateConversationEx>> GetListByUserID(Guid userId)
         {
             IQueryable<PrivateConversationEx> query =
                 from c in _emContext.VPConversations
@@ -72,17 +72,17 @@ namespace ServerWebAPI.DAL
                     MemberId = c.MemberId,
                     UserId = c.UserId,
                     OtherMemberId = c.OtherMemberId,
-                    OtherUser = u ?? null,
-                    NewestMessageId = m.MessageId.ToString() ?? null,
-                    SenderMemberId = m.MemberId ?? null,
-                    MessageType = m.MessageType ?? null,
-                    Content = m.Content ?? null,
-                    Signature = m.Signature ?? null,
-                    Source = m.Source ?? null,
-                    ReplyFor = m.ReplyFor ?? null,
+                    OtherUser = u,
+                    NewestMessageId = m.MessageId.ToString(),
+                    SenderMemberId = m.MemberId,
+                    MessageType = m.MessageType,
+                    Content = m.Content,
+                    Signature = m.Signature,
+                    Source = m.Source,
+                    ReplyFor = m.ReplyFor,
                     SendTime = m.SendTime,
                     Read = m.Read,
-                    Remark = c.Remark ?? null,
+                    Remark = c.Remark,
                     UnreadCount = c.UnreadCount,
                     CreateTime = c.CreateTime,
                     UpdateTime = c.UpdateTime,
@@ -91,7 +91,7 @@ namespace ServerWebAPI.DAL
 
         }
 
-        public async Task<PrivateConversationEx?> GetByIDUserID(string conversationId, string userId)
+        public async Task<PrivateConversationEx?> GetByIDUserID(Guid conversationId, Guid userId)
         {
             IQueryable<PrivateConversationEx> query =
                 from c in _emContext.VPConversations
@@ -106,17 +106,17 @@ namespace ServerWebAPI.DAL
                     MemberId = c.MemberId,
                     UserId = c.UserId,
                     OtherMemberId = c.OtherMemberId,
-                    OtherUser = u ?? null,
-                    NewestMessageId = m.MessageId.ToString() ?? null,
-                    SenderMemberId = m.MemberId ?? null,
-                    MessageType = m.MessageType ?? null,
-                    Content = m.Content ?? null,
-                    Signature = m.Signature ?? null,
-                    Source = m.Source ?? null,
-                    ReplyFor = m.ReplyFor ?? null,
+                    OtherUser = u,
+                    NewestMessageId = m.MessageId.ToString(),
+                    SenderMemberId = m.MemberId,
+                    MessageType = m.MessageType,
+                    Content = m.Content,
+                    Signature = m.Signature,
+                    Source = m.Source,
+                    ReplyFor = m.ReplyFor,
                     SendTime = m.SendTime,
                     Read = m.Read,
-                    Remark = c.Remark ?? null,
+                    Remark = c.Remark,
                     UnreadCount = c.UnreadCount,
                     CreateTime = c.CreateTime,
                     UpdateTime = c.UpdateTime,

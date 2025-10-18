@@ -5,7 +5,7 @@ namespace ServerWebAPI.ModelsEx
     public class ContactEx
     {
 
-        public string ContactId { get; set; } = null!;
+        public Guid ContactId { get; set; }
 
         public VUserProfile? ContactUser { get; set; }
 

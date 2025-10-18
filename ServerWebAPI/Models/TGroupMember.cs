@@ -5,11 +5,10 @@ namespace ServerWebAPI.Models;
 
 public partial class TGroupMember
 {
-    public string MemberId { get; set; } = null!;
+    public Guid MemberId { get; set; }
+    public Guid ConversationId { get; set; }
 
-    public string ConversationId { get; set; } = null!;
-
-    public string? UserId { get; set; }
+    public Guid? UserId { get; set; }
 
     public int IsAdmin { get; set; }
 

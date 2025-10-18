@@ -21,7 +21,7 @@ namespace ServerWebAPI.DAL
             return privateMessage;
         }
 
-        public async Task<List<PrivateMessageEx>> GetListExByConversationID(string conversationId)
+        public async Task<List<PrivateMessageEx>> GetListExByConversationID(Guid conversationId)
         {
             IQueryable<PrivateMessageEx> query =
                 _emContext.VPConversationMessages.Where(m => m.ConversationId == conversationId)
@@ -42,7 +42,7 @@ namespace ServerWebAPI.DAL
             return await query.ToListAsync();
         }
 
-        public async Task<List<TPrivateMessage>> GetListByConversationID(string conversationId)
+        public async Task<List<TPrivateMessage>> GetListByConversationID(Guid conversationId)
         {
             IQueryable<TPrivateMessage> query =
                 _emContext.VPConversationMessages.Where(m => m.ConversationId == conversationId)

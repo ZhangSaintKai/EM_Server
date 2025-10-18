@@ -31,13 +31,13 @@ namespace ServerWebAPI.BLL
             password = _useSHA.NoSaltToString(password);
             TUser user = new()
             {
-                UserId = Guid.NewGuid().ToString(),
+                UserId = Guid.NewGuid(),
                 Username = username,
                 Password = password,
                 Emid = username,
                 NickName = username,
                 PublicKey = _useSHA.NoSaltToString(Guid.NewGuid().ToString()), // 暂占位
-                Avatar = Guid.NewGuid().ToString(),
+                Avatar = Guid.NewGuid(),
                 Token = _useSHA.WithSaltToString(username, Guid.NewGuid().ToString()),
                 FileToken = _useSHA.NoSaltToString(Guid.NewGuid().ToString()),
                 CreateTime = DateTime.Now,
@@ -90,7 +90,7 @@ namespace ServerWebAPI.BLL
             return await _userDAL.GetProfileListByEMID(emid);
         }
 
-        public async Task<VUserProfile?> GetByProfileUserID(string userId)
+        public async Task<VUserProfile?> GetByProfileUserID(Guid userId)
         {
             return await _userDAL.GetProfileByUserID(userId);
         }
@@ -100,7 +100,7 @@ namespace ServerWebAPI.BLL
             await _userDAL.Update(user);
         }
 
-        public async Task UpdatePassword(string userId, string originalPassword, string newPassword)
+        public async Task UpdatePassword(Guid userId, string originalPassword, string newPassword)
         {
             TUser? user = await _userDAL.GetByUserID(userId) ?? throw new Exception("目标用户不存在");
             originalPassword = _useSHA.NoSaltToString(originalPassword);
@@ -113,7 +113,7 @@ namespace ServerWebAPI.BLL
         public async Task Logout(TUser user)
         {
             user.Token = null;
-            _wss.RemoveWS(Guid.Parse(user.UserId));
+            _wss.RemoveWS(user.UserId);
             await _userDAL.Update(user);
         }
 

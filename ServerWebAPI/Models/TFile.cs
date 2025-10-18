@@ -5,7 +5,7 @@ namespace ServerWebAPI.Models;
 
 public partial class TFile
 {
-    public string FileId { get; set; } = null!;
+    public Guid FileId { get; set; }
 
     public string FileName { get; set; } = null!;
 
@@ -15,7 +15,7 @@ public partial class TFile
 
     public string PermissionType { get; set; } = null!;
 
-    public string? OwnerId { get; set; }
+    public Guid? OwnerId { get; set; }
 
     public DateTime CreateTime { get; set; }
 }

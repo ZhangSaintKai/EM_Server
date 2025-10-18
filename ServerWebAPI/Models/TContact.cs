@@ -5,17 +5,17 @@ namespace ServerWebAPI.Models;
 
 public partial class TContact
 {
-    public string ContactId { get; set; } = null!;
+    public Guid ContactId { get; set; }
 
     /// <summary>
     /// 此数据所属用户Id
     /// </summary>
-    public string UserId { get; set; } = null!;
+    public Guid UserId { get; set; }
 
     /// <summary>
     /// 联系人用户Id
     /// </summary>
-    public string ContactUserId { get; set; } = null!;
+    public Guid ContactUserId { get; set; }
 
     public string? Remark { get; set; }
 

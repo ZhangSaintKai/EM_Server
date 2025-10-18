@@ -54,13 +54,13 @@ namespace ServerWebAPI.Controllers
                         user = await _userBLL.GetByToken(messageToken);
                         if (user == null)
                         {
-                            await webSocket.SendAsync( new ArraySegment<byte>(Encoding.UTF8.GetBytes("登录信息无效")), WebSocketMessageType.Text, true, CancellationToken.None);
+                            await webSocket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes("登录信息无效")), WebSocketMessageType.Text, true, CancellationToken.None);
                             //await webSocket.CloseAsync(receiveResult.CloseStatus.Value, receiveResult.CloseStatusDescription, CancellationToken.None);
                             throw new Exception("登录信息无效");
                         }
                         else
                         {
-                            _wss.AddWS(Guid.Parse(user.UserId), webSocket);
+                            _wss.AddWS(user.UserId, webSocket);
                             await webSocket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes("服务端已标识WS")), WebSocketMessageType.Text, true, CancellationToken.None);
                         }
                     }
@@ -69,7 +69,7 @@ namespace ServerWebAPI.Controllers
                 }
                 // 收到关闭消息后，关闭WebSocket连接
                 await webSocket.CloseAsync(receiveResult.CloseStatus.Value, receiveResult.CloseStatusDescription, CancellationToken.None);
-                _wss.RemoveWS(Guid.Parse(user.UserId));
+                _wss.RemoveWS(user.UserId);
                 Console.WriteLine($"WebSocket Closed: {receiveResult.CloseStatus.Value}，{receiveResult.CloseStatusDescription}");
             }
             catch (Exception e)

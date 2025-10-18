@@ -5,7 +5,7 @@ namespace ServerWebAPI.Models;
 
 public partial class TPrivateConversation
 {
-    public string ConversationId { get; set; } = null!;
+    public Guid ConversationId { get; set; }
 
     public DateTime CreateTime { get; set; }
 

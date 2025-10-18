@@ -12,7 +12,7 @@ namespace ServerWebAPI.DAL
             _emContext = emContext;
         }
 
-        public async Task<bool> IsExist(string fileId)
+        public async Task<bool> IsExist(Guid fileId)
         {
             return await _emContext.TFiles.AnyAsync(f => f.FileId == fileId);
         }
@@ -23,7 +23,7 @@ namespace ServerWebAPI.DAL
             await _emContext.SaveChangesAsync();
         }
 
-        public async Task<TFile?> GetById(string fileId)
+        public async Task<TFile?> GetById(Guid fileId)
         {
             IQueryable<TFile> query = _emContext.TFiles.Where(f => f.FileId == fileId);
             return await query.SingleOrDefaultAsync();

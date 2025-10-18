@@ -31,11 +31,11 @@ namespace ServerWebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetByID(string conversationId)
+        public async Task<IActionResult> GetByID(Guid conversationId)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(conversationId)) return UnprocessableEntity("会话ID不能为空");
+                if (conversationId == Guid.Empty) return UnprocessableEntity("会话ID不能为空");
                 if (HttpContext.Items["User"] is not TUser user) return Unauthorized("HttpContext.Items[User] IS NULL");
                 PrivateConversationEx? conversation = await _conversationBLL.GetByIDUserID(conversationId, user.UserId);
                 return Ok(conversation);
@@ -47,11 +47,11 @@ namespace ServerWebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] string otherUserId)
+        public async Task<IActionResult> Create([FromBody] Guid otherUserId)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(otherUserId)) return UnprocessableEntity("私聊对象用户ID不能为空");
+                if (otherUserId == Guid.Empty) return UnprocessableEntity("私聊对象用户ID不能为空");
                 if (HttpContext.Items["User"] is not TUser user) return Unauthorized("HttpContext.Items[User] IS NULL");
                 PrivateConversationEx? conversation = await _conversationBLL.Create(user.UserId, otherUserId);
                 return Ok(conversation);

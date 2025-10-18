@@ -5,13 +5,13 @@ namespace ServerWebAPI.Models;
 
 public partial class VPConversationMessage
 {
-    public string ConversationId { get; set; } = null!;
+    public Guid ConversationId { get; set; }
 
     public long MessageId { get; set; }
 
-    public string MemberId { get; set; } = null!;
+    public Guid MemberId { get; set; }
 
-    public string UserId { get; set; } = null!;
+    public Guid UserId { get; set; }
 
     public string MessageType { get; set; } = null!;
 
@@ -19,9 +19,9 @@ public partial class VPConversationMessage
 
     public string? Signature { get; set; }
 
-    public string? Source { get; set; }
+    public Guid? Source { get; set; }
 
-    public string? ReplyFor { get; set; }
+    public Guid? ReplyFor { get; set; }
 
     public DateTime SendTime { get; set; }
 

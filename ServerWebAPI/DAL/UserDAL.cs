@@ -58,13 +58,13 @@ namespace ServerWebAPI.DAL
             return await query.ToListAsync();
         }
 
-        public async Task<VUserProfile?> GetProfileByUserID(string userId)
+        public async Task<VUserProfile?> GetProfileByUserID(Guid userId)
         {
             IQueryable<VUserProfile> query = _emContext.VUserProfiles.Where(u => u.UserId == userId);
             return await query.SingleOrDefaultAsync();
         }
 
-        public async Task<TUser?> GetByUserID(string userId)
+        public async Task<TUser?> GetByUserID(Guid userId)
         {
             return await _emContext.TUsers.Where(u => u.UserId == userId).SingleOrDefaultAsync();
         }

@@ -23,14 +23,14 @@ namespace ServerWebAPI.BLL
             _wss = webSocketService;
         }
 
-        public async Task<List<PrivateMessageEx>> GetList(string userId, string conversationId)
+        public async Task<List<PrivateMessageEx>> GetList(Guid userId, Guid conversationId)
         {
             PrivateConversationEx conversation = await _conversationBLL.GetByIDUserID(conversationId, userId) ?? throw new Exception("当前登录用户不是此会话中的成员");
             List<PrivateMessageEx> messageExList = await _messageDAL.GetListExByConversationID(conversationId);
             return messageExList;
         }
 
-        public async Task<TPrivateMessage> Send(string userId, string conversationId, string messageType, string content, string signature, string? source, string? replyFor)
+        public async Task<TPrivateMessage> Send(Guid userId, Guid conversationId, string messageType, string content, string signature, Guid? source, Guid? replyFor)
         {
             PrivateConversationEx conversation = await _conversationBLL.GetByIDUserID(conversationId, userId) ?? throw new Exception("当前登录用户不是此会话中的成员");
             TPrivateMessage message = new()
@@ -47,8 +47,8 @@ namespace ServerWebAPI.BLL
             };
             message = await _messageDAL.Create(message);
             //
-            if (conversation.OtherUser == null || string.IsNullOrWhiteSpace(conversation.OtherUser.UserId)) throw new Exception("找不到此会话的其他成员");
-            WebSocket? webSocket = _wss.GetWS(Guid.Parse(conversation.OtherUser.UserId));
+            if (conversation.OtherUser == null || conversation.OtherUser.UserId == Guid.Empty) throw new Exception("找不到此会话的其他成员");
+            WebSocket? webSocket = _wss.GetWS(conversation.OtherUser.UserId);
             if (webSocket != null)
             {
                 try
@@ -69,7 +69,7 @@ namespace ServerWebAPI.BLL
 
         }
 
-        public async Task Read(string userId, string conversationId)
+        public async Task Read(Guid userId, Guid conversationId)
         {
             PrivateConversationEx conversation = await _conversationBLL.GetByIDUserID(conversationId, userId) ?? throw new Exception("当前登录用户不是此会话中的成员");
             List<TPrivateMessage> messageReadList = await _messageDAL.GetListByConversationID(conversationId);

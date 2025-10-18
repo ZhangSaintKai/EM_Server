@@ -42,11 +42,11 @@ namespace ServerWebAPI.Controllers
 
         [HttpPost]
         [RequestSizeLimit(100_000_000)] // 允许的请求正文的最大大小（以字节为单位）
-        public async Task<IActionResult> Upload(IFormFile EM_Client_File, string ownerId, PermissionType permissionType)
+        public async Task<IActionResult> Upload(IFormFile EM_Client_File, Guid ownerId, PermissionType permissionType)
         {
             if (EM_Client_File == null || EM_Client_File.Length == 0)
                 return UnprocessableEntity("文件不能为空");
-            if (string.IsNullOrWhiteSpace(ownerId))
+            if (ownerId == Guid.Empty)
                 return UnprocessableEntity("文件归属ID不能为空");
             try
             {
@@ -56,7 +56,7 @@ namespace ServerWebAPI.Controllers
                 string uploadFolder = GetFileCategoryFolder(EM_Client_File.ContentType);
                 // 重命名文件
                 string[]? splitName = EM_Client_File.FileName.Split('.');
-                string fileId = Guid.NewGuid().ToString();
+                Guid fileId = Guid.NewGuid();
                 if (splitName.Length < 2)
                     throw new Exception("文件没有后缀名");
                 string extension = splitName.Last();
@@ -107,11 +107,11 @@ namespace ServerWebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetFile(string fileId, string? fileToken)
+        public async Task<IActionResult> GetFile(Guid fileId, string? fileToken)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(fileId)) throw new Exception("文件资源ID不能为空");
+                if (fileId == Guid.Empty) throw new Exception("文件资源ID不能为空");
                 TFile? file = await _fileBLL.GetById(fileId);
                 if (file == null) throw new Exception("资源ID不存在");
                 if (file.PermissionType != PermissionType.Public.ToString())
@@ -136,11 +136,11 @@ namespace ServerWebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ReadFile(string fileId, string? fileToken)
+        public async Task<IActionResult> ReadFile(Guid fileId, string? fileToken)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(fileId)) throw new Exception("文件资源ID不能为空");
+                if (fileId == Guid.Empty) throw new Exception("文件资源ID不能为空");
                 TFile? file = await _fileBLL.GetById(fileId);
                 if (file == null) throw new Exception("资源ID不存在");
                 if (file.PermissionType == PermissionType.Public.ToString())

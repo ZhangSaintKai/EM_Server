@@ -7,7 +7,7 @@ public partial class TPrivateMessage
 {
     public long MessageId { get; set; }
 
-    public string MemberId { get; set; } = null!;
+    public Guid MemberId { get; set; }
 
     public string MessageType { get; set; } = null!;
 
@@ -15,9 +15,9 @@ public partial class TPrivateMessage
 
     public string? Signature { get; set; }
 
-    public string? Source { get; set; }
+    public Guid? Source { get; set; }
 
-    public string? ReplyFor { get; set; }
+    public Guid? ReplyFor { get; set; }
 
     public DateTime SendTime { get; set; }
 

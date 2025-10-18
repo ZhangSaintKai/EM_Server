@@ -32,11 +32,11 @@ namespace ServerWebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetByID(string contactId)
+        public async Task<IActionResult> GetByID(Guid contactId)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(contactId))
+                if (contactId == Guid.Empty)
                     return UnprocessableEntity("联系人ID不能为空");
                 ContactEx? contact = await _contactBLL.GetByID(contactId);
                 return Ok(contact);
@@ -48,11 +48,11 @@ namespace ServerWebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CheckContact(string targetUserId)
+        public async Task<IActionResult> CheckContact(Guid targetUserId)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(targetUserId))
+                if (targetUserId == Guid.Empty)
                     return UnprocessableEntity("联系人ID不能为空");
                 if (HttpContext.Items["User"] is not TUser user) return Unauthorized("HttpContext.Items[User] IS NULL");
                 ContactEx? contact = await _contactBLL.GetBy2UserID(user.UserId, targetUserId);
@@ -65,11 +65,11 @@ namespace ServerWebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] string contactUserId)
+        public async Task<IActionResult> Create([FromBody] Guid contactUserId)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(contactUserId)) return UnprocessableEntity("联系人用户ID不能为空");
+                if (contactUserId == Guid.Empty) return UnprocessableEntity("联系人用户ID不能为空");
                 if (HttpContext.Items["User"] is not TUser user) return Unauthorized("HttpContext.Items[User] IS NULL");
                 ContactEx? contact = await _contactBLL.Create(user.UserId, contactUserId);
                 return Ok(contact);

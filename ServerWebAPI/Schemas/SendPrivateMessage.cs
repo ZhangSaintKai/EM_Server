@@ -2,7 +2,7 @@
 {
     public class SendPrivateMessage
     {
-        public string ConversationId { get; set; } = null!;
+        public Guid ConversationId { get; set; }
 
         public string MessageType { get; set; } = null!;
 
@@ -10,8 +10,8 @@
 
         public string Signature { get; set; } = null!;
 
-        public string? Source { get; set; }
+        public Guid? Source { get; set; }
 
-        public string? ReplyFor { get; set; }
+        public Guid? ReplyFor { get; set; }
     }
 }

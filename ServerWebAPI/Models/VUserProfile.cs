@@ -5,7 +5,7 @@ namespace ServerWebAPI.Models;
 
 public partial class VUserProfile
 {
-    public string UserId { get; set; } = null!;
+    public Guid UserId { get; set; }
 
     public string Emid { get; set; } = null!;
 
@@ -13,7 +13,7 @@ public partial class VUserProfile
 
     public string PublicKey { get; set; } = null!;
 
-    public string Avatar { get; set; } = null!;
+    public Guid Avatar { get; set; }
 
     public DateTime CreateTime { get; set; }
 

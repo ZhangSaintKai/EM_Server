@@ -15,22 +15,22 @@ namespace ServerWebAPI.BLL
             _userBLL = userBLL;
         }
 
-        public async Task<List<ContactEx>> GetListByUserID(string userId)
+        public async Task<List<ContactEx>> GetListByUserID(Guid userId)
         {
             return await _contactDAL.GetListByUserID(userId);
         }
 
-        public async Task<ContactEx?> GetByID(string contactId)
+        public async Task<ContactEx?> GetByID(Guid contactId)
         {
             return await _contactDAL.GetByID(contactId);
         }
 
-        public async Task<ContactEx?> GetBy2UserID(string userId, string contactUserId)
+        public async Task<ContactEx?> GetBy2UserID(Guid userId, Guid contactUserId)
         {
             return await _contactDAL.GetBy2UserID(userId, contactUserId);
         }
 
-        public async Task<ContactEx?> Create(string userId, string contactUserId)
+        public async Task<ContactEx?> Create(Guid userId, Guid contactUserId)
         {
             VUserProfile? user = await _userBLL.GetByProfileUserID(contactUserId) ?? throw new Exception("联系人用户不存在");
             //排重
@@ -38,7 +38,7 @@ namespace ServerWebAPI.BLL
             //不存在联系人时，创建新联系人
             if (contact == null)
             {
-                string contactId = Guid.NewGuid().ToString();
+                Guid contactId = Guid.NewGuid();
                 TContact newContact = new()
                 {
                     ContactId = contactId,

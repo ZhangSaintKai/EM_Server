@@ -5,11 +5,11 @@ namespace ServerWebAPI.Models;
 
 public partial class TPrivateMember
 {
-    public string MemberId { get; set; } = null!;
+    public Guid MemberId { get; set; }
 
-    public string ConversationId { get; set; } = null!;
+    public Guid ConversationId { get; set; }
 
-    public string UserId { get; set; } = null!;
+    public Guid UserId { get; set; }
 
     public DateTime CreateTime { get; set; }
 

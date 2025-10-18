@@ -5,13 +5,13 @@ namespace ServerWebAPI.Models;
 
 public partial class TGroupConversation
 {
-    public string ConversationId { get; set; } = null!;
+    public Guid ConversationId { get; set; }
 
-    public string? Owner { get; set; }
+    public Guid? Owner { get; set; }
 
     public string? Description { get; set; }
 
-    public string Avatar { get; set; } = null!;
+    public Guid Avatar { get; set; }
 
     public DateTime CreateTime { get; set; }
 

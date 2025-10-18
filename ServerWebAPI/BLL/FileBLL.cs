@@ -18,12 +18,12 @@ namespace ServerWebAPI.BLL
             _privateConversationBLL = privateConversationBLL;
         }
 
-        public async Task<bool> IsExist(string fileId)
+        public async Task<bool> IsExist(Guid fileId)
         {
             return await _fileDAL.IsExist(fileId);
         }
 
-        public async Task SaveFileAndRefer(string fileId, string fileName, string fileType, string fileStorageName, string permissionType, string ownerId)
+        public async Task SaveFileAndRefer(Guid fileId, string fileName, string fileType, string fileStorageName, string permissionType, Guid ownerId)
         {
             TFile file = new()
             {
@@ -64,7 +64,7 @@ namespace ServerWebAPI.BLL
             return true;
         }
 
-        public async Task<TFile?> GetById(string fileId)
+        public async Task<TFile?> GetById(Guid fileId)
         {
             return await _fileDAL.GetById(fileId);
         }
