@@ -68,7 +68,7 @@ namespace ServerWebAPI.Controllers
                 {
                     await EM_Client_File.CopyToAsync(stream);
                 }
-                await _fileBLL.SaveFileAndRefer(fileId, EM_Client_File.FileName, EM_Client_File.ContentType, fileStorageName, permissionType.ToString(), ownerId);
+                await _fileBLL.SaveFileAndRefer(fileId, EM_Client_File.FileName, EM_Client_File.ContentType, fileStorageName, permissionType, ownerId);
                 //return Ok($"文件 {EM_Client_File.FileName} 上传成功");
                 return Ok(new { FileId = fileId });
             }
@@ -114,7 +114,7 @@ namespace ServerWebAPI.Controllers
                 if (fileId == Guid.Empty) throw new Exception("文件资源ID不能为空");
                 TFile? file = await _fileBLL.GetById(fileId);
                 if (file == null) throw new Exception("资源ID不存在");
-                if (file.PermissionType != PermissionType.Public.ToString())
+                if (file.PermissionType != PermissionType.Public)
                 {
                     bool permission = await _fileBLL.CheckFilePermission(file, fileToken);
                     if (!permission) return StatusCode(403, "没有权限");
@@ -143,7 +143,7 @@ namespace ServerWebAPI.Controllers
                 if (fileId == Guid.Empty) throw new Exception("文件资源ID不能为空");
                 TFile? file = await _fileBLL.GetById(fileId);
                 if (file == null) throw new Exception("资源ID不存在");
-                if (file.PermissionType == PermissionType.Public.ToString())
+                if (file.PermissionType == PermissionType.Public)
                 {
                     throw new Exception("公共文件不可删除!!!");
                 }

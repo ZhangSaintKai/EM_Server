@@ -70,11 +70,11 @@ public partial class DbEmContext : DbContext
             entity.ToTable("t_file");
 
             entity.Property(e => e.CreateTime).HasColumnType("datetime");
-            entity.Property(e => e.FileName).HasMaxLength(255);
-            entity.Property(e => e.FileStorageName).HasMaxLength(255);
-            entity.Property(e => e.FileType).HasMaxLength(255);
-            entity.Property(e => e.OwnerId).HasMaxLength(255);
-            entity.Property(e => e.PermissionType).HasMaxLength(255);
+            entity.Property(e => e.FileName).IsRequired().HasMaxLength(255);
+            entity.Property(e => e.FileStorageName).IsRequired().HasMaxLength(255);
+            entity.Property(e => e.FileType).IsRequired().HasMaxLength(50);
+            entity.Property(e => e.OwnerId);
+            entity.Property(e => e.PermissionType).HasConversion<string>().HasMaxLength(50);
         });
 
         modelBuilder.Entity<TGroupConversation>(entity =>
@@ -83,10 +83,10 @@ public partial class DbEmContext : DbContext
 
             entity.ToTable("t_group_conversation");
 
-            entity.Property(e => e.Avatar).HasMaxLength(255);
+            entity.Property(e => e.Avatar);
             entity.Property(e => e.CreateTime).HasColumnType("datetime");
             entity.Property(e => e.Description).HasMaxLength(255);
-            entity.Property(e => e.Owner).HasMaxLength(255);
+            entity.Property(e => e.Owner);
             entity.Property(e => e.UpdateTime).HasColumnType("datetime");
         });
 
@@ -102,6 +102,7 @@ public partial class DbEmContext : DbContext
 
             entity.Property(e => e.CreateTime).HasColumnType("datetime");
             entity.Property(e => e.GroupRemark).HasMaxLength(255);
+            entity.Property(e => e.IsAdmin).HasDefaultValue(false);
             entity.Property(e => e.UpdateTime).HasColumnType("datetime");
             entity.Property(e => e.UserRemark).HasMaxLength(255);
         });
@@ -112,13 +113,13 @@ public partial class DbEmContext : DbContext
 
             entity.ToTable("t_group_message");
 
-            entity.Property(e => e.Content).HasColumnType("text");
-            entity.Property(e => e.MemberId).HasMaxLength(255);
-            entity.Property(e => e.MessageType).HasMaxLength(255);
-            entity.Property(e => e.ReplyFor).HasMaxLength(255);
+            entity.Property(e => e.Content).HasMaxLength(4000);
+            entity.Property(e => e.MemberId);
+            entity.Property(e => e.MessageType).IsRequired().HasMaxLength(255);
+            entity.Property(e => e.ReplyFor);
             entity.Property(e => e.SendTime).HasColumnType("datetime");
-            entity.Property(e => e.Signature).HasColumnType("text");
-            entity.Property(e => e.Source).HasMaxLength(255);
+            entity.Property(e => e.Signature).HasMaxLength(4000);
+            entity.Property(e => e.Source);
         });
 
         modelBuilder.Entity<TGroupMessageRead>(entity =>
@@ -127,13 +128,14 @@ public partial class DbEmContext : DbContext
 
             entity.ToTable("t_group_message_read");
 
-            entity.Property(e => e.MemberId).HasMaxLength(255);
+            entity.Property(e => e.MemberId);
             entity.Property(e => e.ReadTime).HasColumnType("datetime");
+            entity.Property(e => e.Read).HasDefaultValue(false);
         });
 
         modelBuilder.Entity<TPrivateConversation>(entity =>
         {
-            entity.HasKey(e => e.ConversationId).HasName("PRIMARY_PrivateConversation ");
+            entity.HasKey(e => e.ConversationId).HasName("PRIMARY_PrivateConversation");
 
             entity.ToTable("t_private_conversation");
 
@@ -159,14 +161,15 @@ public partial class DbEmContext : DbContext
 
             entity.ToTable("t_private_message");
 
-            entity.Property(e => e.Content).HasColumnType("text");
-            entity.Property(e => e.MemberId).HasMaxLength(255);
-            entity.Property(e => e.MessageType).HasMaxLength(255);
+            entity.Property(e => e.Content).HasMaxLength(4000);
+            entity.Property(e => e.MemberId);
+            entity.Property(e => e.MessageType).IsRequired().HasMaxLength(255);
             entity.Property(e => e.ReadTime).HasColumnType("datetime");
-            entity.Property(e => e.ReplyFor).HasMaxLength(255);
+            entity.Property(e => e.ReplyFor);
             entity.Property(e => e.SendTime).HasColumnType("datetime");
-            entity.Property(e => e.Signature).HasColumnType("text");
-            entity.Property(e => e.Source).HasMaxLength(255);
+            entity.Property(e => e.Signature).HasMaxLength(4000);
+            entity.Property(e => e.Source);
+            entity.Property(e => e.Read).HasDefaultValue(false);
         });
 
         modelBuilder.Entity<TUser>(entity =>
@@ -183,15 +186,16 @@ public partial class DbEmContext : DbContext
 
             entity.HasIndex(e => e.Username, "UniqueUsername").IsUnique();
 
-            entity.Property(e => e.Avatar).HasMaxLength(255);
+            entity.Property(e => e.Avatar);
             entity.Property(e => e.CreateTime).HasColumnType("datetime");
-            entity.Property(e => e.Emid).HasColumnName("EMID");
+            entity.Property(e => e.Emid).IsRequired().HasMaxLength(255).HasColumnName("EMID");
             entity.Property(e => e.FileToken).HasMaxLength(255);
             entity.Property(e => e.NickName).HasMaxLength(255);
-            entity.Property(e => e.Password).HasMaxLength(255);
-            entity.Property(e => e.PublicKey).HasColumnType("text");
-            entity.Property(e => e.Token).HasComment("只是表示在设计表时规定最大长度为255个字符，但实际存储的数据长度可以超过这个限制");
+            entity.Property(e => e.Password).IsRequired().HasMaxLength(255);
+            entity.Property(e => e.PublicKey).HasMaxLength(4000);
+            entity.Property(e => e.Token).HasMaxLength(255);
             entity.Property(e => e.UpdateTime).HasColumnType("datetime");
+            entity.Property(e => e.Username).IsRequired().HasMaxLength(255);
         });
 
         modelBuilder.Entity<VPConversation>(entity =>
@@ -200,14 +204,14 @@ public partial class DbEmContext : DbContext
                 .HasNoKey()
                 .ToView("v_p_conversation");
 
-            entity.Property(e => e.ConversationId).HasMaxLength(450);
+            entity.Property(e => e.ConversationId);
             entity.Property(e => e.CreateTime).HasColumnType("datetime");
-            entity.Property(e => e.MemberId).HasMaxLength(450);
-            entity.Property(e => e.OtherMemberId).HasMaxLength(450);
-            entity.Property(e => e.OtherUserId).HasMaxLength(450);
+            entity.Property(e => e.MemberId);
+            entity.Property(e => e.OtherMemberId);
+            entity.Property(e => e.OtherUserId);
             entity.Property(e => e.Remark).HasMaxLength(255);
             entity.Property(e => e.UpdateTime).HasColumnType("datetime");
-            entity.Property(e => e.UserId).HasMaxLength(450);
+            entity.Property(e => e.UserId);
         });
 
         modelBuilder.Entity<VPConversationMember>(entity =>
@@ -216,11 +220,11 @@ public partial class DbEmContext : DbContext
                 .HasNoKey()
                 .ToView("v_p_conversation_member");
 
-            entity.Property(e => e.ConversationId).HasMaxLength(450);
-            entity.Property(e => e.MemberId).HasMaxLength(450);
-            entity.Property(e => e.OtherMemberId).HasMaxLength(450);
-            entity.Property(e => e.OtherUserId).HasMaxLength(450);
-            entity.Property(e => e.UserId).HasMaxLength(450);
+            entity.Property(e => e.ConversationId);
+            entity.Property(e => e.MemberId);
+            entity.Property(e => e.OtherMemberId);
+            entity.Property(e => e.OtherUserId);
+            entity.Property(e => e.UserId);
         });
 
         modelBuilder.Entity<VPConversationMessage>(entity =>
@@ -229,16 +233,16 @@ public partial class DbEmContext : DbContext
                 .HasNoKey()
                 .ToView("v_p_conversation_message");
 
-            entity.Property(e => e.Content).HasColumnType("text");
-            entity.Property(e => e.ConversationId).HasMaxLength(450);
-            entity.Property(e => e.MemberId).HasMaxLength(255);
+            entity.Property(e => e.Content).HasMaxLength(4000);
+            entity.Property(e => e.ConversationId);
+            entity.Property(e => e.MemberId);
             entity.Property(e => e.MessageType).HasMaxLength(255);
             entity.Property(e => e.ReadTime).HasColumnType("datetime");
-            entity.Property(e => e.ReplyFor).HasMaxLength(255);
+            entity.Property(e => e.ReplyFor);
             entity.Property(e => e.SendTime).HasColumnType("datetime");
-            entity.Property(e => e.Signature).HasColumnType("text");
-            entity.Property(e => e.Source).HasMaxLength(255);
-            entity.Property(e => e.UserId).HasMaxLength(450);
+            entity.Property(e => e.Signature).HasMaxLength(4000);
+            entity.Property(e => e.Source);
+            entity.Property(e => e.UserId);
         });
 
         modelBuilder.Entity<VUserProfile>(entity =>
@@ -247,15 +251,15 @@ public partial class DbEmContext : DbContext
                 .HasNoKey()
                 .ToView("v_user_profile");
 
-            entity.Property(e => e.Avatar).HasMaxLength(255);
+            entity.Property(e => e.Avatar);
             entity.Property(e => e.CreateTime).HasColumnType("datetime");
             entity.Property(e => e.Emid)
-                .HasMaxLength(450)
+                .HasMaxLength(255)
                 .HasColumnName("EMID");
             entity.Property(e => e.NickName).HasMaxLength(255);
-            entity.Property(e => e.PublicKey).HasColumnType("text");
+            entity.Property(e => e.PublicKey).HasMaxLength(4000);
             entity.Property(e => e.UpdateTime).HasColumnType("datetime");
-            entity.Property(e => e.UserId).HasMaxLength(450);
+            entity.Property(e => e.UserId);
         });
 
         OnModelCreatingPartial(modelBuilder);

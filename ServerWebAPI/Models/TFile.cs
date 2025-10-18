@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ServerWebAPI.Commons.Enum;
+using System;
 using System.Collections.Generic;
 
 namespace ServerWebAPI.Models;
@@ -13,8 +14,7 @@ public partial class TFile
 
     public string FileStorageName { get; set; } = null!;
 
-    public string PermissionType { get; set; } = null!;
-
+    public PermissionType PermissionType { get; set; }
     public Guid? OwnerId { get; set; }
 
     public DateTime CreateTime { get; set; }

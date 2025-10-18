@@ -10,7 +10,7 @@ public partial class TGroupMember
 
     public Guid? UserId { get; set; }
 
-    public int IsAdmin { get; set; }
+    public bool IsAdmin { get; set; }
 
     public string? UserRemark { get; set; }
 

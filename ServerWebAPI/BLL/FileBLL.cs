@@ -23,7 +23,7 @@ namespace ServerWebAPI.BLL
             return await _fileDAL.IsExist(fileId);
         }
 
-        public async Task SaveFileAndRefer(Guid fileId, string fileName, string fileType, string fileStorageName, string permissionType, Guid ownerId)
+        public async Task SaveFileAndRefer(Guid fileId, string fileName, string fileType, string fileStorageName, PermissionType permissionType, Guid ownerId)
         {
             TFile file = new()
             {
@@ -44,19 +44,19 @@ namespace ServerWebAPI.BLL
                 throw new Exception("非公共文件的请求令牌不能为空");
             TUser? reqUser = await _userBLL.GetByFileToken(fileToken);
             if (reqUser == null) throw new Exception("无效文件令牌");
-            if (file.PermissionType == PermissionType.Conversation.ToString())
+            if (file.PermissionType == PermissionType.Conversation)
             {
                 List<PrivateConversationEx> conversationExList = await _privateConversationBLL.GetListByUserID(reqUser.UserId);
                 PrivateConversationEx? conversationEx = conversationExList.Find(e => e.ConversationId == file.OwnerId);
                 //此文件不属于请求用户的会话
                 if (conversationEx == null) return false;
             }
-            if (file.PermissionType == PermissionType.Member.ToString())
+            if (file.PermissionType == PermissionType.Member)
             {
                 //此文件不属于请求用户的会话成员（暂未使用，未实现）
                 return false;
             }
-            if (file.PermissionType == PermissionType.User.ToString())
+            if (file.PermissionType == PermissionType.User)
             {
                 //此文件不属于请求用户
                 if (file.OwnerId != reqUser.UserId) return false;

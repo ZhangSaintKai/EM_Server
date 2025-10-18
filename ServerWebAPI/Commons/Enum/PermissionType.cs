@@ -1,6 +1,6 @@
 ﻿namespace ServerWebAPI.Commons.Enum
 {
-    public enum PermissionType
+    public enum PermissionType : short
     {
         /// <summary>
         /// 默认：公开，无限制

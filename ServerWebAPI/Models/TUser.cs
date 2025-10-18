@@ -19,9 +19,6 @@ public partial class TUser
 
     public Guid Avatar { get; set; }
 
-    /// <summary>
-    /// 只是表示在设计表时规定最大长度为255个字符，但实际存储的数据长度可以超过这个限制
-    /// </summary>
     public string? Token { get; set; }
 
     public string? FileToken { get; set; }
