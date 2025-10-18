@@ -21,7 +21,7 @@
 
 ## 数据库配置 （SQLServer v2022）
 ### 采用Code First模式，配置步骤
-1. 在项目目录下PowerShell执行：
+1. 在项目目录下PowerShell执行（当EFCoreTools版本在 9.0.10 以上时，使用 dotnet-ef ）：
    ```powershell
    dotnet ef migrations add InitialCreate
    ```
@@ -30,7 +30,7 @@
    - 数据库名称：db_em
    - ~~"对于新数据库：右键单击"数据库"，然后选择"新建数据库"。如果不希望使用默认排序规则，则选择"选项"页，然后从"排序规则"下拉列表中选择某一排序规则。"~~
 
-3. 在项目目录下PowerShell执行：
+3. 在项目目录下PowerShell执行（当EFCoreTools版本在 9.0.10 以上时，使用 dotnet-ef ）：
    ```powershell
    dotnet ef database update
    ```
